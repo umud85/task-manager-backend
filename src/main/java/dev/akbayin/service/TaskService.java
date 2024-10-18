@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.akbayin.dto.TaskRequest;
-import dev.akbayin.model.Task;
+import dev.akbayin.entity.Task;
 
 import java.util.*;
 

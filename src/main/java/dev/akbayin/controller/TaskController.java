@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import dev.akbayin.dto.TaskRequest;
-import dev.akbayin.model.Task;
+import dev.akbayin.entity.Task;
 
 import java.net.*;
 import org.springframework.web.bind.annotation.GetMapping;

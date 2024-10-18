@@ -16,9 +16,9 @@ import static org.hamcrest.Matchers.hasSize;
 
 import java.util.List;
 
-import dev.akbayin.model.Task;
 import dev.akbayin.service.TaskService;
 import dev.akbayin.dto.*;
+import dev.akbayin.entity.Task;
 
 @WebMvcTest(TaskController.class)
 public class TaskControllerTest {
@@ -31,7 +31,7 @@ public class TaskControllerTest {
 
   @Test
   void createTask_ShouldReturnCreatedTask() throws Exception {
-    Task task = new Task(1L, false, "Test Task");
+    Task task = new Task(false, "Test Task");
     TaskRequest taskRequest = new TaskRequest("Test Task");
 
     when(taskService.createTask(any(TaskRequest.class))).thenReturn(task);
@@ -59,8 +59,8 @@ public class TaskControllerTest {
   void fetchAllTasks_ShouldReturnAllTasks() throws Exception {
       // Arrange
       List<Task> mockTasks = List.of(
-          new Task(1L, false, "Buy groceries"),
-          new Task(2L, false, "Complete homework")
+          new Task(false, "Buy groceries"),
+          new Task(false, "Complete homework")
       );
 
       when(taskService.getAllTasks()).thenReturn(mockTasks);
