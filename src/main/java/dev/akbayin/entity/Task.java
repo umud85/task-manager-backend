@@ -1,7 +1,6 @@
 package dev.akbayin.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +17,7 @@ public class Task {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="id")
-  private long id;
+  private Long id;
 
   @Column(name="is_done")
   private boolean isDone;

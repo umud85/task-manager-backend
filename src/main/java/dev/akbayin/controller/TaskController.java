@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.akbayin.service.TaskService;
+import dev.akbayin.service.SimpleTaskService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import dev.akbayin.dto.TaskRequest;
+import dev.akbayin.dto.TaskDTO;
 import dev.akbayin.entity.Task;
 
 import java.net.*;
@@ -23,31 +23,33 @@ import java.util.*;
 @RequestMapping("/api/tasks")
 public class TaskController {
   
-  private final TaskService taskService;
+  private final SimpleTaskService taskService;
 
 
-  public TaskController(TaskService taskService) {
+  public TaskController(SimpleTaskService taskService) {
     this.taskService = taskService;
   }
   
 
   @CrossOrigin
   @PostMapping
-  public ResponseEntity<Task> createTask(@RequestBody TaskRequest taskRequest) {
-    Task createdTask = taskService.createTask(taskRequest);
-
-    if (createdTask == null) {
-      return ResponseEntity.badRequest().build();
+  public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+    try {
+      taskService.saveTask(taskDTO);
+      if (taskDTO.description().isEmpty()) {
+        return ResponseEntity.badRequest().build();
+      }
+      return ResponseEntity.status(HttpStatus.CREATED).body(taskDTO);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-
-    return ResponseEntity.created(URI.create("/api/tasks/" + createdTask.getId()))
-        .body(createdTask);
   }
+  
   
   @CrossOrigin
   @GetMapping()
-  public ResponseEntity<List<Task>> getAllTasks() {
-    List<Task> tasks = taskService.getAllTasks();
+  public ResponseEntity<List<TaskDTO>> getAllTasks() {
+    List<TaskDTO> tasks = taskService.getAllTasks();
 
     if (tasks == null) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
