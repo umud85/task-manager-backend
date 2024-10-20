@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import dev.akbayin.dto.TaskDto;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/api")
 public class TaskController {
 
   private final TaskService taskService;
@@ -28,7 +29,7 @@ public class TaskController {
   }
 
   @CrossOrigin
-  @PostMapping
+  @PostMapping("/tasks")
   public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDTO) {
     try {
       taskService.saveTask(taskDTO);
@@ -42,13 +43,9 @@ public class TaskController {
   }
 
   @CrossOrigin
-  @GetMapping()
+  @GetMapping("/tasks")
   public ResponseEntity<List<TaskDto>> getAllTasks() {
     Optional<List<TaskDto>> tasks = taskService.getAllTasks();
-
-    if (tasks == null) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
 
     if (tasks.isEmpty()) {
       return ResponseEntity.noContent().build();
@@ -57,4 +54,17 @@ public class TaskController {
     return ResponseEntity.ok(tasks.get());
   }
 
+  @CrossOrigin
+  @GetMapping("/task/{taskId}")
+  public ResponseEntity<TaskDto> getTaskById(@PathVariable Long taskId) {
+    Optional<TaskDto> taskDto = taskService.getTaskById(taskId);
+
+    if (taskDto.isEmpty()) {
+      return ResponseEntity.noContent().build();
+    }
+
+    return ResponseEntity.ok(taskDto.get());
+  }
+
 }
+

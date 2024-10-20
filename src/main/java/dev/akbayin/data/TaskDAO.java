@@ -11,4 +11,6 @@ public interface TaskDao {
   void save(Task task);
 
   void delete(Long id);
+
+  Task findById(Long id);
 }

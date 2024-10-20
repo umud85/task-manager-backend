@@ -10,9 +10,9 @@ public interface TaskService {
 
   Optional<List<TaskDto>> getAllTasks();
 
-  TaskDto getTaskById(Long id);
+  Optional<TaskDto> getTaskById(Long id);
 
   Task saveTask(TaskDto taskDTO);
 
-  void deleteTask(Long Id);
+  void deleteTask(Long id);
 }

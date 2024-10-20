@@ -24,6 +24,7 @@ public class JdbcTaskDao implements TaskDao {
 
   private static final String INSERT_TASK_SQL = "INSERT INTO Task (is_done, description) VALUES (?, ?)";
   private static final String GET_TASKS_SQL = "SELECT * FROM Task";
+  private static final String GET_TASK_BY_ID = "SELECT * FROM Task WHERE ID=?";
 
   @Override
   public List<Task> findAll() {
@@ -48,6 +49,31 @@ public class JdbcTaskDao implements TaskDao {
   }
 
   @Override
+  public Task findById(Long id) {
+    Task task;
+    try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(GET_TASK_BY_ID)) {
+
+      statement.setLong(1, id);
+      statement.execute();
+
+      ResultSet resultSet = statement.getResultSet();
+
+      resultSet.next();
+
+      task = new Task();
+      task.setId(resultSet.getLong("id"));
+      task.setDone(resultSet.getBoolean("is_done"));
+      task.setDescription(resultSet.getString("description"));
+
+    } catch (SQLException e) {
+      log.error("Failed to retrieve tasks: " + e);
+      throw new TaskDaoException("Error retrieving task " + e);
+    }
+    return task;
+  }
+
+  @Override
   public void save(Task task) {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(INSERT_TASK_SQL)) {
@@ -64,6 +90,7 @@ public class JdbcTaskDao implements TaskDao {
       throw new TaskDaoException("Error saving task", e);
     }
   }
+  
 
   @Override
   public void delete(Long id) {

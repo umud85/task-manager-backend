@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import dev.akbayin.dto.TaskDto;
 import dev.akbayin.entity.Task;
+import dev.akbayin.exceptions.TaskDaoException;
 import lombok.extern.slf4j.Slf4j;
 import dev.akbayin.data.TaskDao;
 
@@ -23,16 +24,22 @@ public class SimpleTaskService implements TaskService {
     try {
       List<Task> tasks = this.taskDao.findAll();
       return Optional.of(tasks.stream().map(TaskDto::new).toList());
-    } catch (RuntimeException re) {
-      log.error("Error retrieving tasks from the database: {}", re.getMessage(), re);
+    } catch (TaskDaoException e) {
+      log.error("Error retrieving tasks from the database: {}", e.getMessage(), e);
       return Optional.empty();
     }
   }
 
   @Override
-  public TaskDto getTaskById(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getTaskById'");
+  public Optional<TaskDto> getTaskById(Long id) {
+    try {
+      Task task = this.taskDao.findById(id);
+      TaskDto taskDto = new TaskDto(task.isDone(), task.getDescription());
+      return Optional.of(taskDto);
+    } catch (TaskDaoException e) {
+      log.error("Error retrieving task with id={}. Error message: {}", id, e.getMessage(), e);
+      return Optional.empty();
+    }
   }
 
   @Override
@@ -43,7 +50,7 @@ public class SimpleTaskService implements TaskService {
   }
 
   @Override
-  public void deleteTask(Long Id) {
+  public void deleteTask(Long id) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'deleteTask'");
   }

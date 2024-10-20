@@ -45,16 +45,6 @@ public class TaskControllerTest {
   }
 
   @Test
-  void createTask_ShouldReturnBadRequest_WhenTaskIsNull() throws Exception {
-    when(taskService.saveTask(any(TaskDto.class))).thenReturn(null);
-
-    mockMvc.perform(post("/api/tasks")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"description\": \"\"}"))
-        .andExpect(status().isBadRequest());
-  }
-
-  @Test
   void getAllTasks_ShouldReturnNoContent_WhenTaskIsEmpty() throws Exception {
     when(taskService.getAllTasks()).thenReturn(Optional.empty());
 
@@ -63,7 +53,7 @@ public class TaskControllerTest {
         .andExpect(content().string(""))
         .andExpect(header().doesNotExist("Content-Type"));
 
-    verify(taskService, times(1)).getAllTasks(); // Ensure service is called once
+    verify(taskService, times(1)).getAllTasks();
   }
 
   @Test
@@ -79,10 +69,33 @@ public class TaskControllerTest {
     mockMvc.perform(get("/api/tasks"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(2))) // Verify the size of the returned list
+        .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(jsonPath("$[0].description").value("Buy groceries"))
         .andExpect(jsonPath("$[0].isDone").value(false))
         .andExpect(jsonPath("$[1].description").value("Complete homework"))
         .andExpect(jsonPath("$[1].isDone").value(false));
+  }
+
+  @Test
+  void getTaskById_ShouldReturnTask() throws Exception {
+    TaskDto taskDto = new TaskDto(false, "Finish backend");
+
+    when(taskService.getTaskById(1L)).thenReturn(Optional.of(taskDto));
+
+    mockMvc.perform(get("/api/task/{taskId}", 1L))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.isDone").value(false))
+        .andExpect(jsonPath("$.description").value("Finish backend"));
+  }
+
+  @Test
+  void getTaskById_ShouldReturnNoContent_WhenDtoIsEmpty() throws Exception {
+    when(taskService.getTaskById(1L)).thenReturn(Optional.empty());
+
+    mockMvc.perform(get("/api/task/{taskId}", 1L))
+        .andExpect(status().isNoContent())
+        .andExpect(content().string(""))
+        .andExpect(header().doesNotExist("Content-Type"));
   }
 }

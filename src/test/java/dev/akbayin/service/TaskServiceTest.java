@@ -2,6 +2,7 @@ package dev.akbayin.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,7 +26,7 @@ import java.util.*;
 public class TaskServiceTest {
 
   @Mock
-  private TaskDao taskDAO;
+  private TaskDao taskDao;
 
   @InjectMocks
   private SimpleTaskService taskService;
@@ -39,11 +40,11 @@ public class TaskServiceTest {
     Task savedTask = taskService.saveTask(taskDTO);
 
     // Assert: Verify taskDAO.save() was called
-    verify(taskDAO).save(any(Task.class));
+    verify(taskDao).save(any(Task.class));
 
     // Verify taskDAO.save() was called with the expected Task object
     ArgumentCaptor<Task> taskCaptor = ArgumentCaptor.forClass(Task.class);
-    verify(taskDAO).save(taskCaptor.capture());
+    verify(taskDao).save(taskCaptor.capture());
     Task capturedTask = taskCaptor.getValue();
 
     assertEquals("Sample Task", capturedTask.getDescription());
@@ -60,25 +61,38 @@ public class TaskServiceTest {
     Task taskWithFalse = new Task(false, "Then implement");
     List<Task> tasks = List.of(taskWithTrue, taskWithFalse);
 
-    when(taskDAO.findAll()).thenReturn(tasks);
-    Optional<List<TaskDto>> taskDTOs = taskService.getAllTasks();
+    when(taskDao.findAll()).thenReturn(tasks);
+    Optional<List<TaskDto>> taskDtos = taskService.getAllTasks();
 
-    assertEquals(2, taskDTOs.get().size());
-    assertEquals(true, taskDTOs.get().get(0).isDone());
-    assertEquals("Test First", taskDTOs.get().get(0).description());
-    assertEquals(false, taskDTOs.get().get(1).isDone());
-    assertEquals("Then implement", taskDTOs.get().get(1).description());
+    assertTrue(taskDtos.isPresent());
+    assertEquals(2, taskDtos.get().size());
+    assertEquals(true, taskDtos.get().get(0).isDone());
+    assertEquals("Test First", taskDtos.get().get(0).description());
+    assertEquals(false, taskDtos.get().get(1).isDone());
+    assertEquals("Then implement", taskDtos.get().get(1).description());
   }
 
   @Test
   void testGetAllTasks_EmptyList() {
     // Arrange: Mock taskDAO to return an empty list
-    when(taskDAO.findAll()).thenReturn(Collections.emptyList());
+    when(taskDao.findAll()).thenReturn(Collections.emptyList());
 
     // Act: Call the method under test
     Optional<List<TaskDto>> taskDTOs = taskService.getAllTasks();
 
     // Assert: Verify that the returned list is empty
     assertEquals(0, taskDTOs.get().size());
+  }
+
+  @Test
+  void testGetTaskById() {
+    Task task = new Task(false, "Finish backend");
+
+    when(taskDao.findById(1L)).thenReturn(task);
+    Optional<TaskDto> taskDto = taskService.getTaskById(1L);
+
+    assertTrue(taskDto.isPresent());
+    assertEquals(false, taskDto.get().isDone());
+    assertEquals("Finish backend", taskDto.get().description());
   }
 }
