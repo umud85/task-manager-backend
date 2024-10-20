@@ -42,7 +42,7 @@ public class JdbcTaskDao implements TaskDao {
       }
     } catch (SQLException e) {
       log.error("Failed to retrieve tasks: " + e);
-      return Collections.emptyList();
+      throw new TaskDaoException("Error retrieving tasks " + e);
     }
     return tasks;
   }

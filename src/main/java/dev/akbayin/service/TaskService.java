@@ -1,13 +1,14 @@
 package dev.akbayin.service;
 
-import java.util.List;
+import java.util.*;
+
 
 import dev.akbayin.dto.TaskDto;
 import dev.akbayin.entity.Task;
 
 public interface TaskService {
 
-  List<TaskDto> getAllTasks();
+  Optional<List<TaskDto>> getAllTasks();
 
   TaskDto getTaskById(Long id);
 

@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
 
-import java.util.List;
+import java.util.*;
 
 import dev.akbayin.service.TaskService;
 import dev.akbayin.dto.TaskDto;
@@ -53,13 +53,18 @@ public class TaskControllerTest {
   }
 
   @Test
-  void fetchAllTasks_ShouldReturnAllTasks() throws Exception {
+  void getAllTasks_ShouldReturnNoContent_WhenTaskIsEmpty() throws Exception {
+
+  }
+
+  @Test
+  void getAllTasks_ShouldReturnAllTasks() throws Exception {
     // Arrange
     List<TaskDto> mockTasks = List.of(
         new TaskDto(false, "Buy groceries"),
         new TaskDto(false, "Complete homework"));
 
-    when(taskService.getAllTasks()).thenReturn(mockTasks);
+    when(taskService.getAllTasks()).thenReturn(Optional.of(mockTasks));
 
     // Act & Assert
     mockMvc.perform(get("/api/tasks"))

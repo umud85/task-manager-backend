@@ -44,7 +44,7 @@ public class TaskController {
   @CrossOrigin
   @GetMapping()
   public ResponseEntity<List<TaskDto>> getAllTasks() {
-    List<TaskDto> tasks = taskService.getAllTasks();
+    Optional<List<TaskDto>> tasks = taskService.getAllTasks();
 
     if (tasks == null) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -54,7 +54,7 @@ public class TaskController {
       return ResponseEntity.noContent().build();
     }
 
-    return ResponseEntity.ok(tasks);
+    return ResponseEntity.ok(tasks.get());
   }
 
 }

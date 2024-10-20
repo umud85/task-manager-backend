@@ -4,23 +4,29 @@ import org.springframework.stereotype.Service;
 
 import dev.akbayin.dto.TaskDto;
 import dev.akbayin.entity.Task;
+import lombok.extern.slf4j.Slf4j;
 import dev.akbayin.data.TaskDao;
 
 import java.util.*;
 
+@Slf4j
 @Service
 public class SimpleTaskService implements TaskService {
 
-  private final TaskDao taskDAO;
+  private final TaskDao taskDao;
 
-  public SimpleTaskService(TaskDao taskDAO) {
-    this.taskDAO = taskDAO;
+  public SimpleTaskService(TaskDao taskDao) {
+    this.taskDao = taskDao;
   }
 
-  public List<TaskDto> getAllTasks() {
-    List<Task> tasks = this.taskDAO.findAll();
-    List<TaskDto> taskDTOs = tasks.stream().map(TaskDto::new).toList();
-    return taskDTOs;
+  public Optional<List<TaskDto>> getAllTasks() {
+    try {
+      List<Task> tasks = this.taskDao.findAll();
+      return Optional.of(tasks.stream().map(TaskDto::new).toList());
+    } catch (RuntimeException re) {
+      log.error("Error retrieving tasks from the database: {}", re.getMessage(), re);
+      return Optional.empty();
+    }
   }
 
   @Override
@@ -32,7 +38,7 @@ public class SimpleTaskService implements TaskService {
   @Override
   public Task saveTask(TaskDto taskDTO) {
     Task task = new Task(taskDTO.isDone(), taskDTO.description());
-    taskDAO.save(task);
+    taskDao.save(task);
     return task;
   }
 

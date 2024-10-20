@@ -61,13 +61,13 @@ public class TaskServiceTest {
     List<Task> tasks = List.of(taskWithTrue, taskWithFalse);
 
     when(taskDAO.findAll()).thenReturn(tasks);
-    List<TaskDto> taskDTOs = taskService.getAllTasks();
+    Optional<List<TaskDto>> taskDTOs = taskService.getAllTasks();
 
-    assertEquals(2, taskDTOs.size());
-    assertEquals(true, taskDTOs.get(0).isDone());
-    assertEquals("Test First", taskDTOs.get(0).description());
-    assertEquals(false, taskDTOs.get(1).isDone());
-    assertEquals("Then implement", taskDTOs.get(1).description());
+    assertEquals(2, taskDTOs.get().size());
+    assertEquals(true, taskDTOs.get().get(0).isDone());
+    assertEquals("Test First", taskDTOs.get().get(0).description());
+    assertEquals(false, taskDTOs.get().get(1).isDone());
+    assertEquals("Then implement", taskDTOs.get().get(1).description());
   }
 
   @Test
@@ -76,9 +76,9 @@ public class TaskServiceTest {
     when(taskDAO.findAll()).thenReturn(Collections.emptyList());
 
     // Act: Call the method under test
-    List<TaskDto> taskDTOs = taskService.getAllTasks();
+    Optional<List<TaskDto>> taskDTOs = taskService.getAllTasks();
 
     // Assert: Verify that the returned list is empty
-    assertEquals(0, taskDTOs.size());
+    assertEquals(0, taskDTOs.get().size());
   }
 }
