@@ -1,6 +1,8 @@
 package dev.akbayin.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -54,7 +56,14 @@ public class TaskControllerTest {
 
   @Test
   void getAllTasks_ShouldReturnNoContent_WhenTaskIsEmpty() throws Exception {
+    when(taskService.getAllTasks()).thenReturn(Optional.empty());
 
+    mockMvc.perform(get("/api/tasks"))
+        .andExpect(status().isNoContent())
+        .andExpect(content().string(""))
+        .andExpect(header().doesNotExist("Content-Type"));
+
+    verify(taskService, times(1)).getAllTasks(); // Ensure service is called once
   }
 
   @Test
