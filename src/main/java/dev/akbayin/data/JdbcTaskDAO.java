@@ -4,8 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.sql.DataSource;
 
@@ -13,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import dev.akbayin.entity.Task;
+import dev.akbayin.exceptions.TaskDaoException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
-public class JdbcTaskDAO implements TaskDAO {
+public class JdbcTaskDao implements TaskDao {
 
   @Autowired
   private DataSource dataSource;
@@ -39,7 +41,8 @@ public class JdbcTaskDAO implements TaskDAO {
         tasks.add(task);
       }
     } catch (SQLException e) {
-      throw new RuntimeException("Failed to retrieve tasks", e);
+      log.error("Failed to retrieve tasks: " + e);
+      return Collections.emptyList();
     }
     return tasks;
   }
@@ -57,7 +60,8 @@ public class JdbcTaskDAO implements TaskDAO {
         throw new SQLException("No rows affected, task not inserted.");
       }
     } catch (SQLException e) {
-      throw new RuntimeException("Failed to create task", e);
+      log.error("Failed to create the Task: " + e.getMessage());
+      throw new TaskDaoException("Error saving task", e);
     }
   }
 

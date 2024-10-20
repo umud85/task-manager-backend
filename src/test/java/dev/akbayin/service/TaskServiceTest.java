@@ -8,14 +8,15 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import dev.akbayin.data.TaskDAO;
-import dev.akbayin.dto.TaskDTO;
+import dev.akbayin.data.TaskDao;
+import dev.akbayin.dto.TaskDto;
 import dev.akbayin.entity.Task;
 
 import java.util.*;
@@ -24,7 +25,7 @@ import java.util.*;
 public class TaskServiceTest {
 
   @Mock
-  private TaskDAO taskDAO;
+  private TaskDao taskDAO;
 
   @InjectMocks
   private SimpleTaskService taskService;
@@ -32,7 +33,7 @@ public class TaskServiceTest {
   @Test
   void testSaveTask() {
     // Arrange: Create a TaskDTO object
-    TaskDTO taskDTO = new TaskDTO(false, "Sample Task");
+    TaskDto taskDTO = new TaskDto(false, "Sample Task");
 
     // Act: Call the saveTask method of the service
     Task savedTask = taskService.saveTask(taskDTO);
@@ -40,11 +41,19 @@ public class TaskServiceTest {
     // Assert: Verify taskDAO.save() was called
     verify(taskDAO).save(any(Task.class));
 
+    // Verify taskDAO.save() was called with the expected Task object
+    ArgumentCaptor<Task> taskCaptor = ArgumentCaptor.forClass(Task.class);
+    verify(taskDAO).save(taskCaptor.capture());
+    Task capturedTask = taskCaptor.getValue();
+
+    assertEquals("Sample Task", capturedTask.getDescription());
+    assertFalse(capturedTask.isDone());
+
     // Assert the properties of the returned task
     assertEquals("Sample Task", savedTask.getDescription());
     assertFalse(savedTask.isDone());
   }
-  
+
   @Test
   void testGetAllTasks() {
     Task taskWithTrue = new Task(true, "Test First");
@@ -52,7 +61,7 @@ public class TaskServiceTest {
     List<Task> tasks = List.of(taskWithTrue, taskWithFalse);
 
     when(taskDAO.findAll()).thenReturn(tasks);
-    List<TaskDTO> taskDTOs = taskService.getAllTasks();
+    List<TaskDto> taskDTOs = taskService.getAllTasks();
 
     assertEquals(2, taskDTOs.size());
     assertEquals(true, taskDTOs.get(0).isDone());
@@ -67,7 +76,7 @@ public class TaskServiceTest {
     when(taskDAO.findAll()).thenReturn(Collections.emptyList());
 
     // Act: Call the method under test
-    List<TaskDTO> taskDTOs = taskService.getAllTasks();
+    List<TaskDto> taskDTOs = taskService.getAllTasks();
 
     // Assert: Verify that the returned list is empty
     assertEquals(0, taskDTOs.size());

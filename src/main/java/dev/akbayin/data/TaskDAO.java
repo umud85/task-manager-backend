@@ -4,7 +4,7 @@ import java.util.List;
 
 import dev.akbayin.entity.Task;
 
-public interface TaskDAO {
+public interface TaskDao {
 
   List<Task> findAll();
 

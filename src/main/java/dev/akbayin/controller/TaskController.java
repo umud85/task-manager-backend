@@ -11,28 +11,25 @@ import dev.akbayin.service.TaskService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import dev.akbayin.dto.TaskDTO;
+import dev.akbayin.dto.TaskDto;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.*;
 
-
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
-  
-  private final TaskService taskService;
 
+  private final TaskService taskService;
 
   public TaskController(TaskService taskService) {
     this.taskService = taskService;
   }
-  
 
   @CrossOrigin
   @PostMapping
-  public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+  public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDTO) {
     try {
       taskService.saveTask(taskDTO);
       if (taskDTO.description().isEmpty()) {
@@ -43,12 +40,11 @@ public class TaskController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
   }
-  
-  
+
   @CrossOrigin
   @GetMapping()
-  public ResponseEntity<List<TaskDTO>> getAllTasks() {
-    List<TaskDTO> tasks = taskService.getAllTasks();
+  public ResponseEntity<List<TaskDto>> getAllTasks() {
+    List<TaskDto> tasks = taskService.getAllTasks();
 
     if (tasks == null) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

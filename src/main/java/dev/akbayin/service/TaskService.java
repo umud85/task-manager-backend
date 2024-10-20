@@ -2,16 +2,16 @@ package dev.akbayin.service;
 
 import java.util.List;
 
-import dev.akbayin.dto.TaskDTO;
+import dev.akbayin.dto.TaskDto;
 import dev.akbayin.entity.Task;
 
 public interface TaskService {
 
-  List<TaskDTO> getAllTasks();
+  List<TaskDto> getAllTasks();
 
-  TaskDTO getTaskById(Long id);
+  TaskDto getTaskById(Long id);
 
-  Task saveTask(TaskDTO taskDTO);
+  Task saveTask(TaskDto taskDTO);
 
   void deleteTask(Long Id);
 }
