@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.akbayin.service.SimpleTaskService;
+import dev.akbayin.service.TaskService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,10 +24,10 @@ import java.util.*;
 @RequestMapping("/api/tasks")
 public class TaskController {
   
-  private final SimpleTaskService taskService;
+  private final TaskService taskService;
 
 
-  public TaskController(SimpleTaskService taskService) {
+  public TaskController(TaskService taskService) {
     this.taskService = taskService;
   }
   

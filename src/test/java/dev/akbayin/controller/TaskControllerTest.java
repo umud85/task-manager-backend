@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 import java.util.List;
 
-import dev.akbayin.service.SimpleTaskService;
+import dev.akbayin.service.TaskService;
 import dev.akbayin.dto.TaskDTO;
 import dev.akbayin.entity.Task;
 
@@ -27,13 +27,13 @@ public class TaskControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private SimpleTaskService simpleTaskService;
+  private TaskService taskService;
 
   @Test
   void createTask_ShouldReturnCreatedTask() throws Exception {
     Task task = new Task(false, "Test Task");
 
-    when(simpleTaskService.saveTask(any(TaskDTO.class))).thenReturn(task);
+    when(taskService.saveTask(any(TaskDTO.class))).thenReturn(task);
 
     mockMvc.perform(post("/api/tasks")
         .contentType(MediaType.APPLICATION_JSON)
@@ -45,7 +45,7 @@ public class TaskControllerTest {
 
   @Test
   void createTask_ShouldReturnBadRequest_WhenTaskIsNull() throws Exception {
-    when(simpleTaskService.saveTask(any(TaskDTO.class))).thenReturn(null);
+    when(taskService.saveTask(any(TaskDTO.class))).thenReturn(null);
 
     mockMvc.perform(post("/api/tasks")
         .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +61,7 @@ public class TaskControllerTest {
           new TaskDTO(false, "Complete homework")
       );
 
-      when(simpleTaskService.getAllTasks()).thenReturn(mockTasks);
+      when(taskService.getAllTasks()).thenReturn(mockTasks);
 
       // Act & Assert
       mockMvc.perform(get("/api/tasks"))
