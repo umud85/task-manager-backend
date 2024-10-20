@@ -1,10 +1,10 @@
-package dev.akbayin.repository;
+package dev.akbayin.data;
 
 import java.util.List;
 
 import dev.akbayin.entity.Task;
 
-public interface TaskRepository {
+public interface TaskDAO {
 
   List<Task> findAll();
 

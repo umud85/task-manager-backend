@@ -1,4 +1,4 @@
-package dev.akbayin.repository;
+package dev.akbayin.data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import dev.akbayin.entity.Task;
 
 @Repository
-public class SimpleTaskRepository implements TaskRepository {
+public class JdbcTaskDAO implements TaskDAO {
 
   @Autowired
   private DataSource dataSource;
@@ -28,7 +28,7 @@ public class SimpleTaskRepository implements TaskRepository {
     List<Task> tasks = new ArrayList<>();
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(GET_TASKS_SQL)) {
-      
+
       statement.execute();
       ResultSet resultSet = statement.getResultSet();
 
@@ -40,7 +40,7 @@ public class SimpleTaskRepository implements TaskRepository {
       }
     } catch (SQLException e) {
       throw new RuntimeException("Failed to retrieve tasks", e);
-        }
+    }
     return tasks;
   }
 

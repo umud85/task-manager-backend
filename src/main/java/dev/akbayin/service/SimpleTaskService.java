@@ -11,9 +11,9 @@ import java.util.*;
 @Service
 public class SimpleTaskService implements TaskService {
 
-  private final TaskRepository taskRepository;
+  private final TaskDAO taskRepository;
 
-  public SimpleTaskService(TaskRepository taskRepository) {
+  public SimpleTaskService(TaskDAO taskRepository) {
     this.taskRepository = taskRepository;
   }
 
@@ -29,13 +29,12 @@ public class SimpleTaskService implements TaskService {
     throw new UnsupportedOperationException("Unimplemented method 'getTaskById'");
   }
 
-@Override
-public Task saveTask(TaskDTO taskDTO) {
+  @Override
+  public Task saveTask(TaskDTO taskDTO) {
     Task task = new Task(taskDTO.isDone(), taskDTO.description());
     taskRepository.save(task);
     return task;
-}
-
+  }
 
   @Override
   public void deleteTask(Long Id) {
