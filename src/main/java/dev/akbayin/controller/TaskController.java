@@ -70,7 +70,7 @@ public class TaskController {
 
   @CrossOrigin
   @PutMapping("/{taskId}")
-  public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto taskDTO) {
+  public ResponseEntity<Void> updateTask(@RequestBody TaskDto taskDTO) {
     try {
       if (taskDTO.description().isEmpty()) {
         return ResponseEntity.badRequest().build();
@@ -81,5 +81,7 @@ public class TaskController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
   }
+
+  
 
 }
