@@ -35,7 +35,7 @@ public class TaskControllerTest {
   void createTask_ShouldReturnCreatedTask() throws Exception {
     Task task = new Task(false, "Test Task");
 
-    when(taskService.saveTask(any(TaskDto.class))).thenReturn(task);
+    when(taskService.createTask(any(TaskDto.class))).thenReturn(task);
 
     mockMvc.perform(post("/api/tasks")
         .contentType(MediaType.APPLICATION_JSON)

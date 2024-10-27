@@ -30,12 +30,12 @@ public class TaskServiceTest {
   private SimpleTaskService taskService;
 
   @Test
-  void testSaveTask() {
+  void testCreateTask() {
     // Arrange: Create a TaskDTO object
     TaskDto taskDTO = new TaskDto(false, "Sample Task");
 
     // Act: Call the saveTask method of the service
-    Task savedTask = taskService.saveTask(taskDTO);
+    Task savedTask = taskService.createTask(taskDTO);
 
     // Assert: Verify taskDAO.save() was called
     verify(taskDao).save(any(Task.class));
@@ -92,5 +92,12 @@ public class TaskServiceTest {
     assertTrue(taskDto.isPresent());
     assertEquals(false, taskDto.get().isDone());
     assertEquals("Finish backend", taskDto.get().description());
+  }
+
+  @Test
+  void shouldUpdateTaskWithValidId() {
+    Task task = new Task(false, "Finish backend");
+    task.setId(1L);
+
   }
 }

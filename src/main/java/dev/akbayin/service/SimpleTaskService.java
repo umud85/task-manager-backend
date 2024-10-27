@@ -43,7 +43,7 @@ public class SimpleTaskService implements TaskService {
   }
 
   @Override
-  public Task saveTask(TaskDto taskDTO) {
+  public Task createTask(TaskDto taskDTO) {
     Task task = new Task(taskDTO.isDone(), taskDTO.description());
     taskDao.save(task);
     return task;

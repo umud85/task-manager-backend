@@ -32,7 +32,7 @@ public class TaskController {
   @PostMapping
   public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDTO) {
     try {
-      taskService.saveTask(taskDTO);
+      taskService.createTask(taskDTO);
       if (taskDTO.description().isEmpty()) {
         return ResponseEntity.badRequest().build();
       }
@@ -67,4 +67,3 @@ public class TaskController {
   }
 
 }
-
