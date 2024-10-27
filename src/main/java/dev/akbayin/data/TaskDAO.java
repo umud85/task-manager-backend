@@ -9,7 +9,7 @@ public interface TaskDao {
 
   List<Task> findAll();
 
-  void save(Task task);
+  Task save(Task task);
 
   void update(Task task);
 

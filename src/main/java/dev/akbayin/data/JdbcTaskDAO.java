@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 import javax.sql.DataSource;
@@ -77,17 +78,28 @@ public class JdbcTaskDao implements TaskDao {
   }
 
   @Override
-  public void save(Task task) {
+  public Task save(Task task) {
     try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(INSERT_TASK_SQL)) {
+        PreparedStatement statement = connection.prepareStatement(INSERT_TASK_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
       statement.setInt(1, task.isDone() ? 1 : 0);
       statement.setString(2, task.getDescription());
-      int rowsAffected = statement.executeUpdate();
 
-      if (rowsAffected == 0) {
-        throw new SQLException("No rows affected, task not inserted.");
+      int affectedRows = statement.executeUpdate();
+
+      // Check if the insert was successful
+      if (affectedRows > 0) {
+        // Retrieve generated keys
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+          if (generatedKeys.next()) {
+            // Populate the task with the generated ID
+            task.setId(generatedKeys.getLong(1));
+          } else {
+            throw new SQLException("Creating task failed, no ID obtained.");
+          }
+        }
       }
+      return task;
     } catch (SQLException e) {
       log.error("Failed to create the Task: " + e.getMessage());
       throw new TaskDaoException("Error saving task", e);

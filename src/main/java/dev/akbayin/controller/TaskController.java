@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
+// TODO: add global exception handlers
+
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {

@@ -46,8 +46,8 @@ public class SimpleTaskService implements TaskService {
   public Optional<Task> createTask(TaskDto taskDTO) {
     Task task = new Task(taskDTO.isDone(), taskDTO.description());
     try {
-      taskDao.save(task);
-      return Optional.of(task);
+      Task createdTask = taskDao.save(task);
+      return Optional.of(createdTask);
     } catch (TaskDaoException e) {
       log.error("Error creating task: {}", e.getMessage(), e);
       return Optional.empty();

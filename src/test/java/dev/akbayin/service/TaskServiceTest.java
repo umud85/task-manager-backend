@@ -31,16 +31,16 @@ public class TaskServiceTest {
 
   @Test
   void testCreateTask() {
-    // Arrange: Create a TaskDTO object
-    TaskDto taskDTO = new TaskDto(1L, false, "Sample Task");
+    TaskDto taskDto = new TaskDto(1L, false, "Sample Task");
 
-    // Act: Call the saveTask method of the service
-    Optional<Task> savedTask = taskService.createTask(taskDTO);
+    Task task = new Task(false, "Sample Task");
+    task.setId(1L);
+    when(taskDao.save(any(Task.class))).thenReturn(task);
 
-    // Assert: Verify taskDAO.save() was called
+    Optional<Task> savedTask = taskService.createTask(taskDto);
+
     verify(taskDao).save(any(Task.class));
 
-    // Verify taskDAO.save() was called with the expected Task object
     ArgumentCaptor<Task> taskCaptor = ArgumentCaptor.forClass(Task.class);
     verify(taskDao).save(taskCaptor.capture());
     Task capturedTask = taskCaptor.getValue();
@@ -48,7 +48,6 @@ public class TaskServiceTest {
     assertEquals("Sample Task", capturedTask.getDescription());
     assertFalse(capturedTask.isDone());
 
-    // Assert the properties of the returned task
     assertEquals("Sample Task", savedTask.get().getDescription());
     assertFalse(savedTask.get().isDone());
   }
@@ -76,10 +75,10 @@ public class TaskServiceTest {
     when(taskDao.findAll()).thenReturn(Collections.emptyList());
 
     // Act: Call the method under test
-    Optional<List<TaskDto>> taskDTOs = taskService.getAllTasks();
+    Optional<List<TaskDto>> taskDtos = taskService.getAllTasks();
 
     // Assert: Verify that the returned list is empty
-    assertEquals(0, taskDTOs.get().size());
+    assertEquals(0, taskDtos.get().size());
   }
 
   @Test
