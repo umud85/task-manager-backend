@@ -26,6 +26,7 @@ public class JdbcTaskDao implements TaskDao {
   private static final String UPDATE_TASK_SQL = "UPDATE Task SET is_done = ?, description = ? WHERE id = ?;";
   private static final String GET_TASKS_SQL = "SELECT * FROM Task";
   private static final String GET_TASK_BY_ID = "SELECT * FROM Task WHERE ID=?";
+  private static final String DELETE_TASK_BY_ID = "DELETE FROM Task WHERE ID = ?";
 
   @Override
   public List<Task> findAll() {
@@ -98,23 +99,34 @@ public class JdbcTaskDao implements TaskDao {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(UPDATE_TASK_SQL)) {
 
-          statement.setInt(1, task.isDone() ? 1 : 0);
-          statement.setString(2, task.getDescription());
-          statement.setLong(3, task.getId());
+      statement.setInt(1, task.isDone() ? 1 : 0);
+      statement.setString(2, task.getDescription());
+      statement.setLong(3, task.getId());
       int rowsAffected = statement.executeUpdate();
 
       if (rowsAffected == 0) {
-        throw new SQLException("No rows affected, task not inserted.");
+        throw new SQLException("No rows affected, task not updated.");
       }
     } catch (SQLException e) {
-      log.error("Failed to create the Task: " + e.getMessage());
-      throw new TaskDaoException("Error saving task", e);
+      log.error("Failed to update the Task: " + e.getMessage());
+      throw new TaskDaoException("Error updating task", e);
     }
   }
 
   @Override
   public void delete(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(DELETE_TASK_BY_ID)) {
+      
+      statement.setLong(1, id);
+      int rowsAffected = statement.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("No rows affected, task not deleted.");
+      }
+
+    } catch (SQLException e) {
+      log.error("Failed to delete the Task: " + e.getMessage());
+      throw new TaskDaoException("Error deleting task", e);
+    }
   }
 }

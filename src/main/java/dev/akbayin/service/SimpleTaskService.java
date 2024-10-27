@@ -59,7 +59,10 @@ public class SimpleTaskService implements TaskService {
 
   @Override
   public void deleteTask(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteTask'");
+    try {
+      taskDao.delete(id);
+    } catch (TaskDaoException e) {
+      log.error("Error deleting task with id={}. Error message: {}", id, e.getMessage(), e);
+    }
   }
 }

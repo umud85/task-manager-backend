@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.akbayin.service.TaskService;
@@ -82,6 +83,14 @@ public class TaskController {
     }
   }
 
-  
-
+  @CrossOrigin
+  @DeleteMapping("/{taskId}")
+  public ResponseEntity<Void> deleteTask(@RequestParam Long id) {
+    try {
+      taskService.deleteTask(id);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+  }
 }
