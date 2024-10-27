@@ -43,26 +43,38 @@ public class SimpleTaskService implements TaskService {
   }
 
   @Override
-  public Task createTask(TaskDto taskDTO) {
+  public Optional<Task> createTask(TaskDto taskDTO) {
     Task task = new Task(taskDTO.isDone(), taskDTO.description());
-    taskDao.save(task);
-    return task;
+    try {
+      taskDao.save(task);
+      return Optional.of(task);
+    } catch (TaskDaoException e) {
+      log.error("Error creating task: {}", e.getMessage(), e);
+      return Optional.empty();
+    }
   }
 
   @Override
-  public Task updateTask(TaskDto taskDto) {
+  public Optional<Task> updateTask(TaskDto taskDto) {
     Task task = new Task(taskDto.isDone(), taskDto.description());
     task.setId(taskDto.id());
-    taskDao.update(task);
-    return task;
+    try {
+      taskDao.update(task);
+      return Optional.of(task);
+    } catch (TaskDaoException e) {
+      log.error("Error updating task with id={}. Error message: {}", taskDto.id(), e.getMessage(), e);
+      return Optional.empty();
+    }
   }
 
   @Override
-  public void deleteTask(Long id) {
+  public boolean deleteTask(Long id) {
     try {
       taskDao.delete(id);
+      return true; // Indicate success
     } catch (TaskDaoException e) {
       log.error("Error deleting task with id={}. Error message: {}", id, e.getMessage(), e);
+      return false; // Indicate failure
     }
   }
 }

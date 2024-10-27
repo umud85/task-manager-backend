@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import dev.akbayin.dto.TaskDto;
+import dev.akbayin.entity.Task;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,13 +34,14 @@ public class TaskController {
 
   @CrossOrigin
   @PostMapping
-  public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDTO) {
+  public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
     try {
-      if (taskDTO.description().isEmpty()) {
-        return ResponseEntity.badRequest().build();
+      if (taskDto.description() == null || taskDto.description().isEmpty()) {
+        return ResponseEntity.badRequest().body(null);
       }
-      taskService.createTask(taskDTO);
-      return ResponseEntity.status(HttpStatus.CREATED).body(taskDTO);
+      Task createdTask = taskService.createTask(taskDto).get();
+      TaskDto createdTaskDto = new TaskDto(createdTask.getId(), createdTask.isDone(), createdTask.getDescription());
+      return ResponseEntity.status(HttpStatus.CREATED).body(createdTaskDto);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -65,7 +67,6 @@ public class TaskController {
     if (taskDto.isEmpty()) {
       return ResponseEntity.noContent().build();
     }
-
     return ResponseEntity.ok(taskDto.get());
   }
 
@@ -85,12 +86,12 @@ public class TaskController {
 
   @CrossOrigin
   @DeleteMapping("/{taskId}")
-  public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
+  public ResponseEntity<Boolean> deleteTask(@PathVariable Long taskId) {
     try {
-      taskService.deleteTask(taskId);
+      boolean success = taskService.deleteTask(taskId);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
   }
 }

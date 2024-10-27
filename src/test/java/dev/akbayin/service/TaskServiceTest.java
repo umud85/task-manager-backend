@@ -35,7 +35,7 @@ public class TaskServiceTest {
     TaskDto taskDTO = new TaskDto(1L, false, "Sample Task");
 
     // Act: Call the saveTask method of the service
-    Task savedTask = taskService.createTask(taskDTO);
+    Optional<Task> savedTask = taskService.createTask(taskDTO);
 
     // Assert: Verify taskDAO.save() was called
     verify(taskDao).save(any(Task.class));
@@ -49,8 +49,8 @@ public class TaskServiceTest {
     assertFalse(capturedTask.isDone());
 
     // Assert the properties of the returned task
-    assertEquals("Sample Task", savedTask.getDescription());
-    assertFalse(savedTask.isDone());
+    assertEquals("Sample Task", savedTask.get().getDescription());
+    assertFalse(savedTask.get().isDone());
   }
 
   @Test
@@ -109,7 +109,7 @@ public class TaskServiceTest {
 
     TaskDto taskDto = new TaskDto(1L, true, "Sample Task");
 
-    Task updatedTask = taskService.updateTask(taskDto);
+    Optional<Task> updatedTask = taskService.updateTask(taskDto);
 
     verify(taskDao).update(any(Task.class));
 
@@ -120,8 +120,8 @@ public class TaskServiceTest {
     assertEquals("Sample Task", capturedTask.getDescription());
     assertTrue(capturedTask.isDone());
 
-    assertEquals("Sample Task", updatedTask.getDescription());
-    assertTrue(updatedTask.isDone());
+    assertEquals("Sample Task", updatedTask.get().getDescription());
+    assertTrue(updatedTask.get().isDone());
   }
 
   @Test
