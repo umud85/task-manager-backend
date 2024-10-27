@@ -85,9 +85,9 @@ public class TaskController {
 
   @CrossOrigin
   @DeleteMapping("/{taskId}")
-  public ResponseEntity<Void> deleteTask(@RequestParam Long id) {
+  public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
     try {
-      taskService.deleteTask(id);
+      taskService.deleteTask(taskId);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
