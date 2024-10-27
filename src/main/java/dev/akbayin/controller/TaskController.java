@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/tasks")
 public class TaskController {
 
   private final TaskService taskService;
@@ -29,7 +29,7 @@ public class TaskController {
   }
 
   @CrossOrigin
-  @PostMapping("/tasks")
+  @PostMapping
   public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDTO) {
     try {
       taskService.saveTask(taskDTO);
@@ -43,7 +43,7 @@ public class TaskController {
   }
 
   @CrossOrigin
-  @GetMapping("/tasks")
+  @GetMapping
   public ResponseEntity<List<TaskDto>> getAllTasks() {
     Optional<List<TaskDto>> tasks = taskService.getAllTasks();
 
@@ -55,7 +55,7 @@ public class TaskController {
   }
 
   @CrossOrigin
-  @GetMapping("/task/{taskId}")
+  @GetMapping("/{taskId}")
   public ResponseEntity<TaskDto> getTaskById(@PathVariable Long taskId) {
     Optional<TaskDto> taskDto = taskService.getTaskById(taskId);
 
