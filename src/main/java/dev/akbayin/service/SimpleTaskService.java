@@ -50,8 +50,11 @@ public class SimpleTaskService implements TaskService {
   }
 
   @Override
-  public Task updateTask(Long id) {
-    return null;
+  public Task updateTask(TaskDto taskDto) {
+    Task task = new Task(taskDto.isDone(), taskDto.description());
+    task.setId(taskDto.id());
+    taskDao.update(task);
+    return task;
   }
 
   @Override

@@ -5,12 +5,13 @@ import java.util.List;
 import dev.akbayin.entity.Task;
 
 public interface TaskDao {
+  Task findById(Long id);
 
   List<Task> findAll();
 
   void save(Task task);
 
-  void delete(Long id);
+  void update(Task task);
 
-  Task findById(Long id);
+  void delete(Long id);
 }

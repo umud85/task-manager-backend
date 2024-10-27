@@ -23,6 +23,7 @@ public class JdbcTaskDao implements TaskDao {
   private DataSource dataSource;
 
   private static final String INSERT_TASK_SQL = "INSERT INTO Task (is_done, description) VALUES (?, ?)";
+  private static final String UPDATE_TASK_SQL = "UPDATE Task SET is_done = ?, description = ? WHERE id = ?;";
   private static final String GET_TASKS_SQL = "SELECT * FROM Task";
   private static final String GET_TASK_BY_ID = "SELECT * FROM Task WHERE ID=?";
 
@@ -37,6 +38,7 @@ public class JdbcTaskDao implements TaskDao {
 
       while (resultSet.next()) {
         Task task = new Task();
+        task.setId(resultSet.getLong("id"));
         task.setDone(resultSet.getBoolean("is_done"));
         task.setDescription(resultSet.getString("description"));
         tasks.add(task);
@@ -91,6 +93,24 @@ public class JdbcTaskDao implements TaskDao {
     }
   }
   
+  @Override
+  public void update(Task task) {
+    try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(UPDATE_TASK_SQL)) {
+
+          statement.setInt(1, task.isDone() ? 1 : 0);
+          statement.setString(2, task.getDescription());
+          statement.setLong(3, task.getId());
+      int rowsAffected = statement.executeUpdate();
+
+      if (rowsAffected == 0) {
+        throw new SQLException("No rows affected, task not inserted.");
+      }
+    } catch (SQLException e) {
+      log.error("Failed to create the Task: " + e.getMessage());
+      throw new TaskDaoException("Error saving task", e);
+    }
+  }
 
   @Override
   public void delete(Long id) {

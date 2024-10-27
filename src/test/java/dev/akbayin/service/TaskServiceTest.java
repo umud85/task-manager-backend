@@ -96,8 +96,31 @@ public class TaskServiceTest {
 
   @Test
   void shouldUpdateTaskWithValidId() {
-    Task task = new Task(false, "Finish backend");
+    Task task = new Task(false, "Sample Task");
     task.setId(1L);
 
+    when(taskDao.findById(1L)).thenReturn(task);
+
+    Optional<TaskDto> taskDtoOptional = taskService.getTaskById(1L);
+
+    assertTrue(taskDtoOptional.isPresent());
+    assertEquals(false, taskDtoOptional.get().isDone());
+    assertEquals("Sample Task", taskDtoOptional.get().description());
+
+    TaskDto taskDto = new TaskDto(1L, true, "Sample Task");
+
+    Task updatedTask = taskService.updateTask(taskDto);
+
+    verify(taskDao).update(any(Task.class));
+
+    ArgumentCaptor<Task> taskCaptor = ArgumentCaptor.forClass(Task.class);
+    verify(taskDao).update(taskCaptor.capture());
+    Task capturedTask = taskCaptor.getValue();
+
+    assertEquals("Sample Task", capturedTask.getDescription());
+    assertTrue(capturedTask.isDone());
+
+    assertEquals("Sample Task", updatedTask.getDescription());
+    assertTrue(updatedTask.isDone());
   }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.akbayin.service.TaskService;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import dev.akbayin.dto.TaskDto;
@@ -32,10 +33,10 @@ public class TaskController {
   @PostMapping
   public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDTO) {
     try {
-      taskService.createTask(taskDTO);
       if (taskDTO.description().isEmpty()) {
         return ResponseEntity.badRequest().build();
       }
+      taskService.createTask(taskDTO);
       return ResponseEntity.status(HttpStatus.CREATED).body(taskDTO);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -64,6 +65,20 @@ public class TaskController {
     }
 
     return ResponseEntity.ok(taskDto.get());
+  }
+
+  @CrossOrigin
+  @PutMapping("/{taskId}")
+  public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto taskDTO) {
+    try {
+      if (taskDTO.description().isEmpty()) {
+        return ResponseEntity.badRequest().build();
+      }
+      taskService.updateTask(taskDTO);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
   }
 
 }
