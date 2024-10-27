@@ -32,7 +32,7 @@ public class TaskServiceTest {
   @Test
   void testCreateTask() {
     // Arrange: Create a TaskDTO object
-    TaskDto taskDTO = new TaskDto(false, "Sample Task");
+    TaskDto taskDTO = new TaskDto(1L, false, "Sample Task");
 
     // Act: Call the saveTask method of the service
     Task savedTask = taskService.createTask(taskDTO);

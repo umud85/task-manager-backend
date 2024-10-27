@@ -60,8 +60,8 @@ public class TaskControllerTest {
   void getAllTasks_ShouldReturnAllTasks() throws Exception {
     // Arrange
     List<TaskDto> mockTasks = List.of(
-        new TaskDto(false, "Buy groceries"),
-        new TaskDto(false, "Complete homework"));
+        new TaskDto(1L, false, "Buy groceries"),
+        new TaskDto(2L, false, "Complete homework"));
 
     when(taskService.getAllTasks()).thenReturn(Optional.of(mockTasks));
 
@@ -78,7 +78,7 @@ public class TaskControllerTest {
 
   @Test
   void getTaskById_ShouldReturnTask() throws Exception {
-    TaskDto taskDto = new TaskDto(false, "Finish backend");
+    TaskDto taskDto = new TaskDto(1L, false, "Finish backend");
 
     when(taskService.getTaskById(1L)).thenReturn(Optional.of(taskDto));
 

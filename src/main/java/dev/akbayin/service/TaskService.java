@@ -13,5 +13,7 @@ public interface TaskService {
 
   Task createTask(TaskDto taskDTO);
 
+  Task updateTask(Long id);
+
   void deleteTask(Long id);
 }

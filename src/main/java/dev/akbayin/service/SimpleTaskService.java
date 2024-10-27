@@ -34,7 +34,7 @@ public class SimpleTaskService implements TaskService {
   public Optional<TaskDto> getTaskById(Long id) {
     try {
       Task task = this.taskDao.findById(id);
-      TaskDto taskDto = new TaskDto(task.isDone(), task.getDescription());
+      TaskDto taskDto = new TaskDto(task.getId(), task.isDone(), task.getDescription());
       return Optional.of(taskDto);
     } catch (TaskDaoException e) {
       log.error("Error retrieving task with id={}. Error message: {}", id, e.getMessage(), e);
@@ -47,6 +47,11 @@ public class SimpleTaskService implements TaskService {
     Task task = new Task(taskDTO.isDone(), taskDTO.description());
     taskDao.save(task);
     return task;
+  }
+
+  @Override
+  public Task updateTask(Long id) {
+    return null;
   }
 
   @Override
