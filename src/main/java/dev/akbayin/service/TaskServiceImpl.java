@@ -12,11 +12,11 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class SimpleTaskService implements TaskService {
+public class TaskServiceImpl implements TaskService {
 
   private final TaskDao taskDao;
 
-  public SimpleTaskService(TaskDao taskDao) {
+  public TaskServiceImpl(TaskDao taskDao) {
     this.taskDao = taskDao;
   }
 

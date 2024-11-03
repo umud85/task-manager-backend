@@ -27,7 +27,7 @@ public class TaskServiceTest {
   private TaskDao taskDao;
 
   @InjectMocks
-  private SimpleTaskService taskService;
+  private TaskServiceImpl taskService;
 
   @Test
   void testCreateTask() {
