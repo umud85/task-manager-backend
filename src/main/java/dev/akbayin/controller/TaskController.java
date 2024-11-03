@@ -41,9 +41,9 @@ public class TaskController {
       if (taskDto.description() == null || taskDto.description().isEmpty()) {
         return ResponseEntity.badRequest().body(null);
       }
-      Task createdTask = taskService.createTask(taskDto).get();
-      TaskDto createdTaskDto = new TaskDto(createdTask.getId(), createdTask.isDone(), createdTask.getDescription());
-      return ResponseEntity.status(HttpStatus.CREATED).body(createdTaskDto);
+        Task createdTask = taskService.createTask(taskDto).orElseThrow();
+        TaskDto createdTaskDto = new TaskDto(createdTask.getId(), createdTask.isDone(), createdTask.getDescription());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTaskDto);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -53,12 +53,7 @@ public class TaskController {
   @GetMapping
   public ResponseEntity<List<TaskDto>> getAllTasks() {
     Optional<List<TaskDto>> tasks = taskService.getAllTasks();
-
-    if (tasks.isEmpty()) {
-      return ResponseEntity.noContent().build();
-    }
-
-    return ResponseEntity.ok(tasks.get());
+      return tasks.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
   }
 
   @CrossOrigin
