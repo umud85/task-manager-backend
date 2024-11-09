@@ -26,6 +26,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/tasks")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TaskController {
 
   private final TaskService taskService;
@@ -34,7 +35,6 @@ public class TaskController {
     this.taskService = taskService;
   }
 
-  @CrossOrigin
   @PostMapping
   public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
     try {
@@ -49,14 +49,12 @@ public class TaskController {
     }
   }
 
-  @CrossOrigin
   @GetMapping
   public ResponseEntity<List<TaskDto>> getAllTasks() {
     Optional<List<TaskDto>> tasks = taskService.getAllTasks();
       return tasks.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
   }
 
-  @CrossOrigin
   @GetMapping("/{taskId}")
   public ResponseEntity<TaskDto> getTaskById(@PathVariable Long taskId) {
     Optional<TaskDto> taskDto = taskService.getTaskById(taskId);
@@ -67,7 +65,6 @@ public class TaskController {
     return ResponseEntity.ok(taskDto.get());
   }
 
-  @CrossOrigin
   @PutMapping("/{taskId}")
   public ResponseEntity<Void> updateTask(@RequestBody TaskDto taskDTO) {
     try {
@@ -81,7 +78,6 @@ public class TaskController {
     }
   }
 
-  @CrossOrigin
   @DeleteMapping("/{taskId}")
   public ResponseEntity<Boolean> deleteTask(@PathVariable Long taskId) {
     try {
