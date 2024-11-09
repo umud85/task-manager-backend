@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.akbayin.service.TaskService;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
-// TODO: add global exception handlers
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -81,7 +79,7 @@ public class TaskController {
   @DeleteMapping("/{taskId}")
   public ResponseEntity<Boolean> deleteTask(@PathVariable Long taskId) {
     try {
-      boolean success = taskService.deleteTask(taskId);
+      taskService.deleteTask(taskId);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
