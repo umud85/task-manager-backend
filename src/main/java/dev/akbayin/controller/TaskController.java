@@ -64,12 +64,12 @@ public class TaskController {
   }
 
   @PutMapping("/{taskId}")
-  public ResponseEntity<Void> updateTask(@RequestBody TaskDto taskDTO) {
+  public ResponseEntity<Void> updateTask(@RequestBody TaskDto taskDto) {
     try {
-      if (taskDTO.description().isEmpty()) {
+      if (taskDto.description().isEmpty()) {
         return ResponseEntity.badRequest().build();
       }
-      taskService.updateTask(taskDTO);
+      taskService.updateTask(taskDto);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
