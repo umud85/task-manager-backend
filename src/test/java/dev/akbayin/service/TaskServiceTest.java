@@ -64,9 +64,9 @@ public class TaskServiceTest {
 
     assertTrue(taskDtos.isPresent());
     assertEquals(2, taskDtos.get().size());
-    assertEquals(true, taskDtos.get().get(0).isDone());
+    assertTrue(taskDtos.get().get(0).isDone());
     assertEquals("Test First", taskDtos.get().get(0).description());
-    assertEquals(false, taskDtos.get().get(1).isDone());
+    assertFalse(taskDtos.get().get(1).isDone());
     assertEquals("Then implement", taskDtos.get().get(1).description());
   }
 
