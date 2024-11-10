@@ -15,5 +15,5 @@ public interface TaskService {
 
   Optional<Task> updateTask(TaskDto taskDto);
 
-  boolean deleteTask(Long id);
+  void deleteTask(Long id);
 }

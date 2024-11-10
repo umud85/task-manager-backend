@@ -68,13 +68,11 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public boolean deleteTask(Long id) {
+  public void deleteTask(Long id) {
     try {
       taskDao.delete(id);
-      return true; // Indicate success
     } catch (TaskDaoException e) {
       log.error("Error deleting task with id={}. Error message: {}", id, e.getMessage(), e);
-      return false; // Indicate failure
     }
   }
 }
