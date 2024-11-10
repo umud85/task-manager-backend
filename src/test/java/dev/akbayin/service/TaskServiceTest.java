@@ -104,7 +104,7 @@ public class TaskServiceTest {
     Optional<TaskDto> taskDtoOptional = taskService.getTaskById(1L);
 
     assertTrue(taskDtoOptional.isPresent());
-    assertEquals(false, taskDtoOptional.get().isDone());
+    assertFalse(taskDtoOptional.get().isDone());
     assertEquals("Sample Task", taskDtoOptional.get().description());
 
     TaskDto taskDto = new TaskDto(1L, true, "Sample Task");
