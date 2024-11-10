@@ -48,6 +48,7 @@ public class TaskServiceTest {
     assertEquals("Sample Task", capturedTask.getDescription());
     assertFalse(capturedTask.isDone());
 
+    assertTrue(savedTask.isPresent());
     assertEquals("Sample Task", savedTask.get().getDescription());
     assertFalse(savedTask.get().isDone());
   }
