@@ -103,7 +103,7 @@ public class JdbcTaskDao implements TaskDao {
       }
       return task;
     } catch (SQLException e) {
-      log.error("Failed to create the Task: " + e.getMessage());
+      log.error("Failed to create the Task: {}", e.getMessage());
       throw new TaskDaoException("Error saving task", e);
     }
   }
@@ -122,7 +122,7 @@ public class JdbcTaskDao implements TaskDao {
         throw new SQLException("No rows affected, task not updated.");
       }
     } catch (SQLException e) {
-      log.error("Failed to update the Task: " + e.getMessage());
+      log.error("Failed to update the Task: {}", e.getMessage());
       throw new TaskDaoException("Error updating task", e);
     }
   }
@@ -139,7 +139,7 @@ public class JdbcTaskDao implements TaskDao {
       }
 
     } catch (SQLException e) {
-      log.error("Failed to delete the Task: " + e.getMessage());
+      log.error("Failed to delete the Task: {}", e.getMessage());
       throw new TaskDaoException("Error deleting task", e);
     }
   }
