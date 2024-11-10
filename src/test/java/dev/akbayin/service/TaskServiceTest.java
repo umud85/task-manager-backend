@@ -79,6 +79,7 @@ public class TaskServiceTest {
     Optional<List<TaskDto>> taskDtos = taskService.getAllTasks();
 
     // Assert: Verify that the returned list is empty
+    assertTrue(taskDtos.isPresent());
     assertEquals(0, taskDtos.get().size());
   }
 
