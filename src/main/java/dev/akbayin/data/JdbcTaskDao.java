@@ -9,7 +9,6 @@ import java.util.*;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import dev.akbayin.entity.Task;
@@ -20,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 public class JdbcTaskDao implements TaskDao {
 
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   private static final String INSERT_TASK_SQL = "INSERT INTO Task (is_done, description) VALUES (?, ?)";
   private static final String UPDATE_TASK_SQL = "UPDATE Task SET is_done = ?, description = ? WHERE id = ?;";
