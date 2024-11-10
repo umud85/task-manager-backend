@@ -57,10 +57,7 @@ public class TaskController {
   public ResponseEntity<TaskDto> getTaskById(@PathVariable Long taskId) {
     Optional<TaskDto> taskDto = taskService.getTaskById(taskId);
 
-    if (taskDto.isEmpty()) {
-      return ResponseEntity.noContent().build();
-    }
-    return ResponseEntity.ok(taskDto.get());
+    return taskDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
   }
 
   @PutMapping("/{taskId}")
