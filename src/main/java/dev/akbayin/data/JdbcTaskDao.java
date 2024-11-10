@@ -48,7 +48,7 @@ public class JdbcTaskDao implements TaskDao {
         tasks.add(task);
       }
     } catch (SQLException e) {
-      log.error("Failed to retrieve tasks: " + e);
+      log.error("Failed to retrieve tasks: {}", e.getMessage());
       throw new TaskDaoException("Error retrieving tasks " + e);
     }
     return tasks;
@@ -73,7 +73,7 @@ public class JdbcTaskDao implements TaskDao {
       task.setDescription(resultSet.getString("description"));
 
     } catch (SQLException e) {
-      log.error("Failed to retrieve tasks: " + e);
+      log.error("Failed to retrieve tasks: {}", e.getMessage());
       throw new TaskDaoException("Error retrieving task " + e);
     }
     return task;
