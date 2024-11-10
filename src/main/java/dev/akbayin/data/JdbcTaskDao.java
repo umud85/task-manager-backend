@@ -73,7 +73,7 @@ public class JdbcTaskDao implements TaskDao {
       task.setDescription(resultSet.getString("description"));
 
     } catch (SQLException e) {
-      log.error("Failed to retrieve tasks: {}", e.getMessage());
+      log.error("Failed to retrieve task: {}", e.getMessage());
       throw new TaskDaoException("Error retrieving task " + e);
     }
     return task;
