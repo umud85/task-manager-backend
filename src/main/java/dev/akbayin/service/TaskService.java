@@ -13,7 +13,7 @@ public interface TaskService {
 
   Optional<Task> createTask(TaskDto taskDto);
 
-  Optional<Task> updateTask(TaskDto taskDto);
+  Optional<Task> updateTask(TaskDto taskDto, Long id);
 
   void deleteTask(Long id);
 }

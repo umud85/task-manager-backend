@@ -55,9 +55,9 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public Optional<Task> updateTask(TaskDto taskDto) {
+  public Optional<Task> updateTask(TaskDto taskDto, Long id) {
     Task task = new Task(taskDto.isDone(), taskDto.description());
-    task.setId(taskDto.id());
+    task.setId(id);
     try {
       taskDao.update(task);
       return Optional.of(task);

@@ -108,7 +108,7 @@ public class TaskServiceTest {
 
     TaskDto taskDto = new TaskDto(1L, true, "Sample Task");
 
-    Optional<Task> updatedTask = taskService.updateTask(taskDto);
+    Optional<Task> updatedTask = taskService.updateTask(taskDto, taskDto.id());
 
     verify(taskDao).update(any(Task.class));
 
