@@ -90,7 +90,7 @@ public class TaskServiceTest {
     Optional<TaskDto> taskDto = taskService.getTaskById(1L);
 
     assertTrue(taskDto.isPresent());
-    assertEquals(false, taskDto.get().isDone());
+    assertFalse(taskDto.get().isDone());
     assertEquals("Finish backend", taskDto.get().description());
   }
 
