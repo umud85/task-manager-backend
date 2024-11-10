@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 public class JdbcTaskDao implements TaskDao {
 
-  @Autowired
   private DataSource dataSource;
 
   private static final String INSERT_TASK_SQL = "INSERT INTO Task (is_done, description) VALUES (?, ?)";
@@ -29,7 +28,11 @@ public class JdbcTaskDao implements TaskDao {
   private static final String GET_TASK_BY_ID = "SELECT * FROM Task WHERE ID=?";
   private static final String DELETE_TASK_BY_ID = "DELETE FROM Task WHERE ID = ?";
 
-  @Override
+  public JdbcTaskDao(DataSource dataSource) {
+      this.dataSource = dataSource;
+  }
+
+    @Override
   public List<Task> findAll() {
     List<Task> tasks = new ArrayList<>();
     try (Connection connection = dataSource.getConnection();
