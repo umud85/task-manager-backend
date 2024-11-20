@@ -1,6 +1,7 @@
 package dev.akbayin.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,7 @@ public class TaskControllerTest {
   void createTask_ShouldReturnCreatedTask() throws Exception {
     Task task = new Task(false, "Test Task");
 
-    when(taskService.createTask(any(TaskDto.class))).thenReturn(Optional.of(task));
+    given(taskService.createTask(any(TaskDto.class))).willReturn(Optional.of(task));
 
     mockMvc.perform(post("/api/tasks")
         .contentType(MediaType.APPLICATION_JSON)
@@ -46,7 +47,7 @@ public class TaskControllerTest {
 
   @Test
   void getAllTasks_ShouldReturnNoContent_WhenTaskIsEmpty() throws Exception {
-    when(taskService.getAllTasks()).thenReturn(Optional.empty());
+    given(taskService.getAllTasks()).willReturn(Optional.empty());
 
     mockMvc.perform(get("/api/tasks"))
         .andExpect(status().isNoContent())
@@ -63,7 +64,7 @@ public class TaskControllerTest {
         new TaskDto(1L, false, "Buy groceries"),
         new TaskDto(2L, false, "Complete homework"));
 
-    when(taskService.getAllTasks()).thenReturn(Optional.of(mockTasks));
+    given(taskService.getAllTasks()).willReturn(Optional.of(mockTasks));
 
     // Act & Assert
     mockMvc.perform(get("/api/tasks"))
@@ -80,7 +81,7 @@ public class TaskControllerTest {
   void getTaskById_ShouldReturnTask() throws Exception {
     TaskDto taskDto = new TaskDto(1L, false, "Finish backend");
 
-    when(taskService.getTaskById(1L)).thenReturn(Optional.of(taskDto));
+    given(taskService.getTaskById(1L)).willReturn(Optional.of(taskDto));
 
     mockMvc.perform(get("/api/tasks/{taskId}", 1L))
         .andExpect(status().isOk())
@@ -91,7 +92,7 @@ public class TaskControllerTest {
 
   @Test
   void getTaskById_ShouldReturnNoContent_WhenDtoIsEmpty() throws Exception {
-    when(taskService.getTaskById(1L)).thenReturn(Optional.empty());
+    given(taskService.getTaskById(1L)).willReturn(Optional.empty());
 
     mockMvc.perform(get("/api/tasks/{taskId}", 1L))
         .andExpect(status().isNoContent())
